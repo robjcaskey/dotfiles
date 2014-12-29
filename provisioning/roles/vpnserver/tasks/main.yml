@@ -1,0 +1,34 @@
+- name: makesure we are using the OS packages for openswan
+  apt: name=openswan state=present
+- name: make sure we are using the OS packages for xl2tpd
+  apt: name=xl2tpd state=present
+- name: install lsof
+  apt: name=lsof state=present
+- name: set sysctl net.ipv4.ip_forward=1
+  sysctl: name=net.ipv4.ip_forward value=1 state=present reload=yes
+- name: set sysctl net.ipv4.conf.all.accept_redirects=0
+  sysctl: name=net.ipv4.conf.all.accept_redirects value=0 state=present reload=yes
+- name: set sysctl net.ipv4.conf.all.send_redirects=0
+  sysctl: name=net.ipv4.conf.all.send_redirects value=0 state=present reload=yes
+- name: copy xl2tpd_if_settings init script
+  template: src=skel/xl2tpd/etc/init.d/xl2tpd_if_settings dest=/etc/init.d/xl2tpd_if_settings mode=0751
+- name: copy /etc/ipsec.conf template
+  template: src=skel/xl2tpd/etc/ipsec.conf.generic dest=/etc/ipsec.conf
+- name: copy /etc/xl2tpd/xl2tpd.conf template
+  template: src=skel/xl2tpd/etc/xl2tpd/xl2tpd.conf dest=/etc/xl2tpd/xl2tpd.conf
+- name: copy /etc/ppp/options.xl2tpd template
+  template: src=skel/xl2tpd/etc/ppp/options.xl2tpd dest=/etc/ppp/options.xl2tpd.conf
+- name: copy /etc/ppp/chap-secrets template
+  template: src=skel/xl2tpd/etc/ppp/chap-secrets dest=/etc/ppp/chap-secrets
+- name: copy /etc/ipsec.secrets template
+  template: src=skel/xl2tpd/etc/ipsec.secrets dest=/etc/ipsec.secrets
+- name: run init script on startup
+  command: "update-rc.d xl2tpd_if_settings defaults"
+- name: run init script on startup
+  command: "update-rc.d xl2tpd defaults"
+- name: run init script nowt
+  command: /etc/init.d/xl2tpd_if_settings
+- name: "Restart ipsec"
+  service: name=ipsec state=restarted
+- name: "Restart xl2tpd"
+  service: name=xl2tpd state=restarted

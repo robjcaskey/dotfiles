@@ -1,0 +1,21 @@
+require-mschap-v2
+ipcp-accept-remote
+ms-dns 8.8.8.8
+ms-dns 8.8.4.4
+asyncmap 0
+auth
+#crtscts
+lock
+hide-password
+noccp
+modem
+dump
+logfile /var/log/xl2tpd.log
+logfd 2
+idle 1800
+mtu 1410
+mru 1410
+name l2tpd
+proxyarp
+lcp-echo-interval 30
+lcp-echo-failure 4

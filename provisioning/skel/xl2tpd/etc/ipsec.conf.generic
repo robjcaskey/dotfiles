@@ -1,0 +1,42 @@
+version 2.0
+
+config setup
+        dumpdir=/var/run/pluto/
+        nat_traversal=yes
+        oe=off
+        protostack=netkey
+        virtual_private=%v4:10.0.0.0/8,%v4:192.168.80.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8
+        plutostderrlog=/var/log/pluto.log
+        nhelpers=0
+
+
+conn L2TP-PSK-NAT
+    rightsubnet=vhost:%priv
+    also=L2TP-PSK-noNAT
+
+
+conn L2TP-PSK-noNAT
+    authby=secret
+    pfs=no
+    auto=add
+    keyingtries=3
+    rekey=no
+    ikelifetime=8h
+    keylife=1h
+    type=transport
+{% if ec2 is defined and ec2 %}
+    forceencaps=yes
+    left={{private_ipv4}}
+    leftid={{public_ipv4}}
+    leftsubnet={{private_ipv4}}/32
+    leftnexthop=$defaultroute
+    rightsubnetwithin=0.0.0.0/0
+{% else %}
+    left={{public_ipv4}}
+{% endif %}
+    leftprotoport=17/%any
+    right=%any
+    rightprotoport=17/%any
+    dpddelay=15
+    dpdtimeout=30
+    dpdaction=clear

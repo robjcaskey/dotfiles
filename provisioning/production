@@ -1,0 +1,5 @@
+[self]
+localhost ansible_connection=local
+[vpnservers]
+54.69.152.203 ansible_ssh_user=root public_ipv4=54.69.152.203 private_ipv4=172.31.2.150 ec2=true
+www.caskey.org ansible_ssh_user=root public_ipv4=176.58.109.29 private_ipv4=176.58.109.29

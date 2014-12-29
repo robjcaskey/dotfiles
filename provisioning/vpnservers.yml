@@ -1,0 +1,4 @@
+- hosts: vpnservers
+  roles:
+    - common
+    - vpnserver
