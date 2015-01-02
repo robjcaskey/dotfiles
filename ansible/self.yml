@@ -1,0 +1,5 @@
+- hosts: self
+  roles:
+    - common
+    - vpnserver
+    - vagrantserver

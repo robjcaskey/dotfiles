@@ -1,0 +1,12 @@
+- hosts: ataoeservers
+  sudo: yes
+  roles:
+    - ataoekernelmodule
+    - ataoeserver
+    - vpnserver
+- hosts: ataoeguests
+  sudo: yes
+  roles:
+    - ataoekernelmodule
+    - ataoeguest
+    - vpnserver
