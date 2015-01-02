@@ -3,7 +3,7 @@ Vagrant.configure("2") do |config|
   require 'yaml'
   require 'open3'
 
-  vault_file = "~/dotfiles/provisioning/group_vars/all/vaulted_secrets.yml"
+  vault_file = "~/dotfiles/ansible/group_vars/all/vaulted_secrets.yml"
   vault_password_file = "~/vault_pass.txt"
 
   cmd = "ansible-vault view "+vault_file+" --vault-password-file "+vault_password_file+"|cat"
