@@ -26,9 +26,9 @@ conn L2TP-PSK-noNAT
     type=transport
 {% if ec2 is defined and ec2 %}
     forceencaps=yes
-    left={{private_ipv4}}
+    left={{local_ipv4}}
     leftid={{public_ipv4}}
-    leftsubnet={{private_ipv4}}/32
+    leftsubnet={{local_ipv4}}/32
     leftnexthop=$defaultroute
     rightsubnetwithin=0.0.0.0/0
 {% else %}
