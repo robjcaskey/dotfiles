@@ -19,17 +19,17 @@
 - name: set sysctl net.ipv4.conf.all.send_redirects=0
   sysctl: name=net.ipv4.conf.all.send_redirects value=0 state=present reload=yes
 - name: copy xl2tpd_if_settings init script
-  template: src=skel/xl2tpd/etc/init.d/xl2tpd_if_settings dest=/etc/init.d/xl2tpd_if_settings mode=0751
+  template: src=etc/init.d/xl2tpd_if_settings dest=/etc/init.d/xl2tpd_if_settings mode=0751
 - name: copy /etc/ipsec.conf template
-  template: src=skel/xl2tpd/etc/ipsec.conf.generic dest=/etc/ipsec.conf
+  template: src=etc/ipsec.conf.generic dest=/etc/ipsec.conf
 - name: copy /etc/xl2tpd/xl2tpd.conf template
-  template: src=skel/xl2tpd/etc/xl2tpd/xl2tpd.conf dest=/etc/xl2tpd/xl2tpd.conf
+  template: src=etc/xl2tpd/xl2tpd.conf dest=/etc/xl2tpd/xl2tpd.conf
 - name: copy /etc/ppp/options.xl2tpd template
-  template: src=skel/xl2tpd/etc/ppp/options.xl2tpd dest=/etc/ppp/options.xl2tpd
+  template: src=etc/ppp/options.xl2tpd dest=/etc/ppp/options.xl2tpd
 - name: copy /etc/ppp/chap-secrets template
-  template: src=skel/xl2tpd/etc/ppp/chap-secrets dest=/etc/ppp/chap-secrets
+  template: src=etc/ppp/chap-secrets dest=/etc/ppp/chap-secrets
 - name: copy /etc/ipsec.secrets template
-  template: src=skel/xl2tpd/etc/ipsec.secrets dest=/etc/ipsec.secrets
+  template: src=etc/ipsec.secrets dest=/etc/ipsec.secrets
 - name: run init script on startup
   command: "update-rc.d xl2tpd_if_settings defaults"
 - name: run init script on startup
