@@ -1,0 +1,27 @@
+version 2.0
+
+config setup
+        dumpdir=/var/run/pluto/
+        nat_traversal=yes
+        oe=off
+        protostack=netkey
+        virtual_private=%v4:10.0.0.0/8,%v4:192.168.80.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8
+        plutostderrlog=/var/log/pluto.log
+        nhelpers=0
+
+
+
+conn TEST
+    authby=secret
+    auto=start
+{% if ec2 is defined and ec2 %}
+    forceencaps=yes
+    left=%defaultroute
+    leftid={{public_ipv4}}
+    leftsourceip={{ipsec_local_ip}}
+    rightsubnetwithin=0.0.0.0/0
+{% else %}
+    left={{public_ipv4}}
+{% endif %}
+    right={{ipsec_remote_ip}}
+    rightsubnet=10.0.0.0/8

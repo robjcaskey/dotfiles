@@ -25,7 +25,7 @@
 - name: copy /etc/xl2tpd/xl2tpd.conf template
   template: src=skel/xl2tpd/etc/xl2tpd/xl2tpd.conf dest=/etc/xl2tpd/xl2tpd.conf
 - name: copy /etc/ppp/options.xl2tpd template
-  template: src=skel/xl2tpd/etc/ppp/options.xl2tpd dest=/etc/ppp/options.xl2tpd.conf
+  template: src=skel/xl2tpd/etc/ppp/options.xl2tpd dest=/etc/ppp/options.xl2tpd
 - name: copy /etc/ppp/chap-secrets template
   template: src=skel/xl2tpd/etc/ppp/chap-secrets dest=/etc/ppp/chap-secrets
 - name: copy /etc/ipsec.secrets template

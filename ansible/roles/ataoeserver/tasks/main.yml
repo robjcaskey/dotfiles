@@ -1,0 +1,6 @@
+- name: install vblade
+  apt: name=vblade state=present
+- stat: path=/dummy_disk.raw
+  register: dummy_disk
+- command: "fallocate -l 1G /dummy_disk.raw"
+  when: dummy_disk.stat.exists == False

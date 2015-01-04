@@ -1,0 +1,29 @@
+#- name: install kernel image
+#  apt: name=linux-image-3.13.0-43-generic state=present cache_valid_time=86400 update_cache=yes
+#- name: restart machine
+#  command: shutdown -r now "Ansible updates triggered"
+#  async: 0
+#  poll: 0
+#  ignore_errors: true
+#- name: waiting for server to come back
+#  local_action: wait_for host={{ inventory_hostname }}
+#                state=started
+#  sudo: false
+- name: install kernel headers
+  apt: name=linux-headers-generic
+- name: install build-essential
+  apt: name=build-essential state=present cache_valid_time=86400 update_cache=yes
+- name: make sure /usr/local/src/ataoekernelmodule exists
+  file: path=/usr/local/src/ataoekernelmodule state=directory
+- name: download and xtract aoetools driver
+  shell: "wget http://support.coraid.com/support/linux/aoe6-85.tar.gz -q -O -|tar xzvf - -C /usr/local/src/ataoekernelmodule"
+- name: fix udev rules for newer Ubuntu udevs
+  replace: dest=/usr/local/src/ataoekernelmodule/aoe6-85/linux/Documentation/aoe/udev.txt regexp='(.*)NAME=(.*)' replace='\1SYMLINK=\2' backup=yes
+- name: install ataoekernel module
+  shell: make install
+  args:
+    chdir: /usr/local/src/ataoekernelmodule/aoe6-85
+- name: make sure the kernel module is running
+  modprobe: name=aoe state=present
+- name: set module to autoload at boot
+  lineinfile: dest=/etc/modules state=present regexp='^aoe' line='aoe'

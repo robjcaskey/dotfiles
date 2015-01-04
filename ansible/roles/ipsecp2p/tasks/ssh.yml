@@ -1,0 +1,9 @@
+- name: make sure ssh is installed
+  apt: name=openssh-server state=present
+- name: "make sure ssh doesnt use reverse dns lookups"
+  - ini_file:dest=/etc/ssh/sshd_config
+    option=UseDNS
+    value=no
+#- name: "Restart ssh if needed" 
+#  service: name=ssh state=restarted
+

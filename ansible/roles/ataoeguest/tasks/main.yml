@@ -1,0 +1,3 @@
+- name: install aoetools
+  apt: name=aoetools state=present
+
