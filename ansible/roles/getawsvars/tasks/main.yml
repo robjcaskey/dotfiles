@@ -1,0 +1,12 @@
+- name: get our raw local ipv4 address
+  command: "curl http://169.254.169.254/latest/meta-data/local-ipv4"
+  register: raw_local_ivpv4
+- name: pretty up the raw ocal ipv4 address
+  set_fact:
+    local_ipv4: "{{raw_local_ivpv4.stdout}}"
+- name: get our raw public ipv4 address
+  command: "curl http://169.254.169.254/latest/meta-data/public-ipv4"
+  register: raw_public_ivpv4
+- name: pretty up the raw publicipv4 address
+  set_fact:
+    public_ipv4: "{{raw_public_ivpv4.stdout}}"
