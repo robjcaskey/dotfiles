@@ -1,0 +1,2 @@
+[netbootservers]
+localhost	ansible_connection=local

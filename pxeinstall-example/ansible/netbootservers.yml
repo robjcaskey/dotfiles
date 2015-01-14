@@ -1,0 +1,5 @@
+---
+#file netbootservers
+- hosts: netbootservers
+  roles:
+  - pxeserver
