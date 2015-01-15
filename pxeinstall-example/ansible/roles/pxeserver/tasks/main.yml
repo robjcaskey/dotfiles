@@ -1,10 +1,14 @@
 - apt: name=syslinux state=present
 - apt: name=dnsmasq state=present
-- file: path=/var/lib/tftpboot state=directory
-- file: path=/var/lib/tftpboot/i386 state=directory
+- file: path=/var/lib/tftpboot state=directory mode=755
+- file: path=/var/lib/netboot_images state=directory mode=755
+- get_url: url=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-amd64/current/images/netboot/netboot.tar.gz dest=/var/lib/netboot_images/amd64-trusty-installer.tar.gz
+- command: tar xzvf /var/lib/netboot_images/amd64-trusty-installer.tar.gz -C /var/lib/tftpboot
+- template: src=var/lib/tftpboot/pxelinux.cfg/default dest=/var/lib/tftpboot/pxelinux.cfg/default mode=755
 - template: src=etc/dnsmasq.d/main.conf dest=/etc/dnsmasq.d/main.conf
-- file: dest=/var/lib/tftpboot/i386/pxelinux.0 src=/usr/lib/syslinux/pxelinux.0 state=link force=yes
-- file: path=/var/lib/tftpboot/i386/pxelinux.cfg state=directory
-- template: src=var/lib/tftpboot/i386/pxelinux.cfg/default dest=/var/lib/tftpboot/i386/pxelinux.cfg/default
+- service: name=dnsmasq state=restarted
 - apt: name=nginx state=present
-- get_url: url=http://releases.ubuntu.com/14.04.1/ubuntu-14.04.1-desktop-amd64.iso dest=/usr/share/ngix/www/ubuntu-14.04.1-desktop-amd64.iso
+- template: src=usr/share/nginx/html/ks.cfg dest=/usr/share/nginx/html/ks.cfg mode=755
+#- apt: name=squid state=present
+#- template: src=etc/squid3/squid.conf dest=/etc/squid3/squid.conf mode=755
+#- service: name=squid3 state=restarted

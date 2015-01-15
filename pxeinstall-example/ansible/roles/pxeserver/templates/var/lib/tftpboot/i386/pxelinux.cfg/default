@@ -1,4 +1,0 @@
-label linux-tftp-iso
-	kernel syslinux/kernel/bzImage
-	append=initrd/syslinux/kernel/initramfs.gz vga=1 url=http://192.168.1.138/ubuntu-14.04.1-desktop-amd64.iso
-

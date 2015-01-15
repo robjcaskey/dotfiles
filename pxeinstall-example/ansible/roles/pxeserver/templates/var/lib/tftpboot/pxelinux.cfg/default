@@ -1,0 +1,6 @@
+default install
+label install
+	menu label ^Install RJC
+	menu default
+	kernel ubuntu-installer/amd64/linux
+	append vga=788 initrd=ubuntu-installer/amd64/initrd.gz  ks=http://{{ansible_default_ipv4.address}}/ks.cfg --
