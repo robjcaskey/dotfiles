@@ -14,8 +14,7 @@
 - template: src=var/lib/tftpboot/pxelinux.cfg/default dest=/var/lib/tftpboot/pxelinux.cfg/default mode=755
 - template: src=etc/dnsmasq.d/main.conf dest=/etc/dnsmasq.d/main.conf
 - template: src=etc/dnsmasq.d/mac_whitelist.conf dest=/etc/dnsmasq.d/mac_whitelist.conf
-# this will mess up easy network sharing with network manager gui in ubuntu
-- file: path=/etc/resolvconf/update.d/dnsmasq state=absent
+- template: src=etc/init.d/dnsmasq dest=/etc/init.d/dnsmasq
 - service: name=dnsmasq state=restarted
 - template: src=usr/share/nginx/html/ks.cfg dest={{nginx_root}}/ks.cfg mode=755
 #- apt: name=squid state=present
