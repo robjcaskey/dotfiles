@@ -1,0 +1,22 @@
+- set_fact:
+    nginx_root: /usr/share/nginx/html
+# probably more version dependent than distro
+- set_fact:
+    nginx_root: /usr/share/nginx/www
+  when: ansible_distribution == 'Debian'
+- apt: name=syslinux state=present
+- apt: name=dnsmasq state=present
+- apt: name=nginx state=present
+- file: path=/var/lib/tftpboot state=directory mode=755
+- file: path=/var/lib/netboot_images state=directory mode=755
+- get_url: url=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-amd64/current/images/netboot/netboot.tar.gz dest=/var/lib/netboot_images/amd64-trusty-installer.tar.gz
+- command: tar xzvf /var/lib/netboot_images/amd64-trusty-installer.tar.gz -C /var/lib/tftpboot
+- template: src=var/lib/tftpboot/pxelinux.cfg/default dest=/var/lib/tftpboot/pxelinux.cfg/default mode=755
+- template: src=etc/dnsmasq.d/main.conf dest=/etc/dnsmasq.d/main.conf
+- template: src=etc/dnsmasq.d/mac_whitelist.conf dest=/etc/dnsmasq.d/mac_whitelist.conf
+- template: src=etc/init.d/dnsmasq dest=/etc/init.d/dnsmasq
+- service: name=dnsmasq state=restarted
+- template: src=usr/share/nginx/html/ks.cfg dest={{nginx_root}}/ks.cfg mode=755
+#- apt: name=squid state=present
+#- template: src=etc/squid3/squid.conf dest=/etc/squid3/squid.conf mode=755
+#- service: name=squid3 state=restarted

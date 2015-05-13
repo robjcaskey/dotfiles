@@ -1,0 +1,6 @@
+default install
+label install
+	menu label ^Boot RJC
+	menu default
+	kernel ubuntu-boot/amd64/vmlinuz-3.13.0-32-generic
+	append vga=788 initrd=ubuntu-boot/amd64/vmlinuz-3.13.0-32-generic  nfsroot={{ansible_default_ipv4.address}}:/var/nfs/trusty-amd64 ip=dhcp rw --
