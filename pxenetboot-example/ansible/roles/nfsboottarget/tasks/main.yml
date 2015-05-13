@@ -1,10 +1,21 @@
 - apt: name=debootstrap state=present
 - apt: name=nfs-kernel-server state=present
-- file: path=/var/nfs state=directory mode=755
-- file: path=/var/trusty-amd64 state=directory mode=755
-- file: path=/var/lib/tftpboot/ubuntu-boot/amd64 state=directory mode=755
-#- command: /usr/sbin/debootstrap --arch=amd64 trusty /var/nfs/trusty
-#- command: /usr/sbin/mkinitramfs -o /var/nfs/trusty-amd64/boot/initrd.img
+- file: path=/var/nfsroot state=directory mode=755
+- file: path=/var/nfsroot/trusty-amd64 state=directory mode=755
+- file: path=/var/lib/tftpboot/ubuntu-boot/trusty/amd64 state=directory mode=755
+- template: src=etc/exports dest=/etc/exports mode=755
+- command: /usr/sbin/exportfs -rv
+#- command: /usr/sbin/debootstrap --arch=amd64 trusty /var/nfsroot/trusty-amd64
+- command: /bin/mount -o bind /dev /var/nfsroot/trusty-amd64/dev
+- command: /bin/mount -o bind /proc /var/nfsroot/trusty-amd64/proc
+- command: /usr/sbin/chroot /var/nfsroot/trusty-amd64 apt-get update
+- command: /usr/sbin/chroot /var/nfsroot/trusty-amd64 apt-get install -y linux-image-3.13.0-24-generic syslinux
+- command: /bin/umount /var/nfsroot/trusty-amd64/dev
+- command: /bin/umount /var/nfsroot/trusty-amd64/proc
+- copy: src=/var/nfsroot/trusty-amd64/usr/lib/syslinux/pxelinux.0 dest=/var/lib/tftpboot/ubuntu-boot/trusty/amd64
+- copy: src=/var/nfsroot/trusty-amd64/boot/vmlinuz-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/trusty/amd64
+- copy: src=/var/nfsroot/trusty-amd64/boot/initrd.img-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/trusty/amd64
+#- command: /usr/sbin/mkinitramfs -o /var/nfsroot/trusty-amd64/boot/initrd.img
 # TODO download kernel
 #- set_fact:
 #    nginx_root: /usr/share/nginx/html
