@@ -1,6 +1,6 @@
 default install
 label install
-	menu label ^Boot RJC
+	menu label ^Boot Vivid
 	menu default
-	kernel ubuntu-boot/trusty/amd64/vmlinuz-3.13.0-24-generic
-	append vga=788 initrd=ubuntu-boot/trusty/amd64/initrd.img-3.13.0-24-generic nfsroot={{ansible_default_ipv4.address}}:/var/nfsroot/trusty-amd64 ip=dhcp rw --
+	kernel ubuntu-boot/vivid/amd64/vmlinuz-3.19.0-15-generic
+	append vga=788 boot=nfs root=/dev/nfs initrd=ubuntu-boot/vivid/amd64/initramfs nfsroot={{ansible_default_ipv4.address}}:/var/nfsroot/vivid-amd64 ip=dhcp rw --
