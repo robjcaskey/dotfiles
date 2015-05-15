@@ -4,3 +4,7 @@
   roles:
   - pxeserver
   - nfsboottarget
+  vars:
+    target_kernel_version: 3.16.0-37
+    target_release: trusty
+    target_arch: amd64

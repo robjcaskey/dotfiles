@@ -9,8 +9,8 @@
 - apt: name=nginx state=present
 - file: path=/var/lib/tftpboot state=directory mode=755
 - file: path=/var/lib/netboot_images state=directory mode=755
-- get_url: url=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-amd64/current/images/netboot/netboot.tar.gz dest=/var/lib/netboot_images/amd64-trusty-installer.tar.gz
-- command: tar xzvf /var/lib/netboot_images/amd64-trusty-installer.tar.gz -C /var/lib/tftpboot
+- get_url: url=http://archive.ubuntu.com/ubuntu/dists/trusty/main/installer-{{target_arch}}/current/images/netboot/netboot.tar.gz dest=/var/lib/netboot_images/{{target_arch}}-trusty-installer.tar.gz
+- command: tar xzvf /var/lib/netboot_images/{{target_arch}}-trusty-installer.tar.gz -C /var/lib/tftpboot
 - template: src=var/lib/tftpboot/pxelinux.cfg/default dest=/var/lib/tftpboot/pxelinux.cfg/default mode=755
 - template: src=etc/dnsmasq.d/main.conf dest=/etc/dnsmasq.d/main.conf
 - template: src=etc/dnsmasq.d/mac_whitelist.conf dest=/etc/dnsmasq.d/mac_whitelist.conf

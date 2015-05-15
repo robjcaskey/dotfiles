@@ -1,6 +1,6 @@
 default install
 label install
-	menu label ^Boot Vivid
+	menu label ^Boot {{target_release}}
 	menu default
-	kernel ubuntu-boot/vivid/amd64/vmlinuz-3.19.0-15-generic
-	append vga=788 boot=nfs root=/dev/nfs initrd=ubuntu-boot/vivid/amd64/initramfs nfsroot={{ansible_default_ipv4.address}}:/var/nfsroot/vivid-amd64 ip=dhcp rw --
+	kernel ubuntu-boot/{{target_release}}/{{target_arch}}/vmlinuz-{{target_kernel_version}}-generic
+	append vga=788 boot=nfs root=/dev/nfs initrd=ubuntu-boot/{{target_release}}/{{target_arch}}/initramfs nfsroot={{ansible_default_ipv4.address}}:/var/nfsroot/{{target_release}}-{{target_arch}} ip=dhcp rw --

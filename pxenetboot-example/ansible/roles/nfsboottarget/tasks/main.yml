@@ -1,27 +1,27 @@
 - apt: name=debootstrap state=present
 - apt: name=nfs-kernel-server state=present
 - file: path=/var/nfsroot state=directory mode=755
-- file: path=/var/nfsroot/vivid-amd64 state=directory mode=755
-- file: path=/var/lib/tftpboot/ubuntu-boot/vivid/amd64 state=directory mode=755
+- file: path=/var/nfsroot/{{target_release}}-{{target_arch}} state=directory mode=755
+- file: path=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}} state=directory mode=755
 - template: src=etc/exports dest=/etc/exports mode=755
 - command: /usr/sbin/exportfs -rv
-- apt: name=linux-image-3.19.0-15-generic
-- copy: src=/boot/vmlinuz-3.19.0-15-generic dest=/var/lib/tftpboot/ubuntu-boot/vivid/amd64
-- copy: src=initramfs-tools dest=/tmp/initramfs-tools-vivid
-- command: mkinitramfs -o /var/lib/tftpboot/ubuntu-boot/vivid/amd64/initramfs -c /tmp/initramfs-tools-vivid 3.19.0-15-generic
-#- command: /usr/sbin/debootstrap --arch=amd64 vivid /var/nfsroot/vivid-amd64
-- file: path=/var/nfsroot/vivid-amd64/root/.ssh mode=600 state=directory
-- copy: src=/root/.ssh/id_rsa.pub dest=/var/nfsroot/vivid-amd64/root/.ssh/authorized_keys mode=600
-- command: /usr/sbin/chroot /var/nfsroot/vivid-amd64 /usr/bin/apt-get update
-- command: /usr/sbin/chroot /var/nfsroot/vivid-amd64 /usr/bin/apt-get install -y openssh-server
-#- command: /bin/mount -o bind /dev /var/nfsroot/vivid-amd64/dev
-#- command: /bin/mount -o bind /proc /var/nfsroot/vivid-amd64/proc
-#- command: /bin/umount /var/nfsroot/vivid-amd64/dev
-#- command: /bin/umount /var/nfsroot/vivid-amd64/proc
-#- copy: src=/var/nfsroot/vivid-amd64/usr/lib/syslinux/pxelinux.0 dest=/var/lib/tftpboot/ubuntu-boot/vivid/amd64
-#- copy: src=/var/nfsroot/vivid-amd64/boot/vmlinuz-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/vivid/amd64
-#- copy: src=/var/nfsroot/vivid-amd64/boot/initrd.img-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/vivid/amd64
-#- command: /usr/sbin/mkinitramfs -o /var/nfsroot/vivid-amd64/boot/initrd.img
+- apt: name=linux-image-{{target_kernel_version}}-generic
+- copy: src=/boot/vmlinuz-{{target_kernel_version}}-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
+- copy: src=initramfs-tools dest=/tmp/initramfs-tools-{{target_release}}
+- command: mkinitramfs -o /var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}/initramfs -c /tmp/initramfs-tools-{{target_release}} {{target_kernel_version}}-generic
+- command: /usr/sbin/debootstrap --arch={{target_arch}} {{target_release}} /var/nfsroot/{{target_release}}-{{target_arch}}
+- file: path=/var/nfsroot/{{target_release}}-{{target_arch}}/root/.ssh mode=600 state=directory
+- copy: src=/root/.ssh/id_rsa.pub dest=/var/nfsroot/{{target_release}}-{{target_arch}}/root/.ssh/authorized_keys mode=600
+- command: /usr/sbin/chroot /var/nfsroot/{{target_release}}-{{target_arch}} /usr/bin/apt-get update
+- command: /usr/sbin/chroot /var/nfsroot/{{target_release}}-{{target_arch}} /usr/bin/apt-get install -y openssh-server
+#- command: /bin/mount -o bind /dev /var/nfsroot/{{target_release}}-{{target_arch}}/dev
+#- command: /bin/mount -o bind /proc /var/nfsroot/{{target_release}}-{{target_arch}}/proc
+#- command: /bin/umount /var/nfsroot/{{target_release}}-{{target_arch}}/dev
+#- command: /bin/umount /var/nfsroot/{{target_release}}-{{target_arch}}/proc
+#- copy: src=/var/nfsroot/{{target_release}}-{{target_arch}}/usr/lib/syslinux/pxelinux.0 dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
+#- copy: src=/var/nfsroot/{{target_release}}-{{target_arch}}/boot/vmlinuz-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
+#- copy: src=/var/nfsroot/{{target_release}}-{{target_arch}}/boot/initrd.img-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
+#- command: /usr/sbin/mkinitramfs -o /var/nfsroot/{{target_release}}-{{target_arch}}/boot/initrd.img
 # TODO download kernel
 #- set_fact:
 #    nginx_root: /usr/share/nginx/html
@@ -34,7 +34,7 @@
 #- apt: name=nginx state=present
 #- file: path=/var/lib/tftpboot state=directory mode=755
 #- file: path=/var/lib/netboot_images state=directory mode=755
-#- command: tar xzvf /var/lib/netboot_images/amd64-vivid-installer.tar.gz -C /var/lib/tftpboot
+#- command: tar xzvf /var/lib/netboot_images/{{target_arch}}-{{target_release}}-installer.tar.gz -C /var/lib/tftpboot
 #- template: src=var/lib/tftpboot/pxelinux.cfg/default dest=/var/lib/tftpboot/pxelinux.cfg/default mode=755
 #- template: src=etc/dnsmasq.d/main.conf dest=/etc/dnsmasq.d/main.conf
 #- template: src=etc/dnsmasq.d/mac_whitelist.conf dest=/etc/dnsmasq.d/mac_whitelist.conf

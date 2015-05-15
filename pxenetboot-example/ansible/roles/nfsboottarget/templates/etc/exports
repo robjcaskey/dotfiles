@@ -9,4 +9,4 @@
 # /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
 #
 #/var/nfsroot	*(rw,async,no_subtree_check,no_root_squash,insecure,fsid=0)
-/var/nfsroot/vivid-amd64	*(rw,async,insecure_locks,no_subtree_check,no_root_squash,insecure,fsid=0)
+/var/nfsroot/{{target_release}}-{{target_arch}}	*(rw,async,insecure_locks,no_subtree_check,no_root_squash,insecure,fsid=0)
