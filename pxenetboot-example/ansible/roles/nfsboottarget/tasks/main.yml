@@ -5,11 +5,12 @@
 - file: path=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}} state=directory mode=755
 - template: src=etc/exports dest=/etc/exports mode=755
 - command: /usr/sbin/exportfs -rv
-- apt: name=linux-image-{{target_kernel_version}}-generic
+- apt: name=linux-image-extra-{{target_kernel_version}}-generic
 - copy: src=/boot/vmlinuz-{{target_kernel_version}}-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
-- copy: src=/etc/initramfs-tools dest=/tmp
 - copy: src=initramfs-tools dest=/tmp
-- command: mkinitramfs -o /var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}/initramfs -c /tmp/initramfs-tools-{{target_release}} {{target_kernel_version}}-generic
+#- copy: src=/etc/initramfs-tools dest=/tmp
+#- copy: src=initramfs-tools/initramfs.conf dest=/tmp/initramfs-tools
+- command: mkinitramfs -o /var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}/initramfs -c /tmp/initramfs-tools {{target_kernel_version}}-generic
 #- command: /usr/sbin/debootstrap --arch={{target_arch}} {{target_release}} /var/nfsroot/{{target_release}}-{{target_arch}}
 - file: path=/var/nfsroot/{{target_release}}-{{target_arch}}/root/.ssh mode=600 state=directory
 - copy: src=/root/.ssh/id_rsa.pub dest=/var/nfsroot/{{target_release}}-{{target_arch}}/root/.ssh/authorized_keys mode=600

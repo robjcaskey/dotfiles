@@ -12,3 +12,8 @@
 nfsv4
 ixgbe
 igb
+dca
+i2c_algo_bit
+igb
+ptp
+pps_core
