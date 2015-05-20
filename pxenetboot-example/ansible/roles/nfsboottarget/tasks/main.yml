@@ -1,4 +1,5 @@
 - apt: name=debootstrap state=present
+- apt: name=linux-image-extra-{{target_kernel_version}}-generic state=present
 - apt: name=nfs-kernel-server state=present
 - file: path=/var/nfsroot state=directory mode=755
 - file: path=/var/nfsroot/{{target_release}}-{{target_arch}} state=directory mode=755
@@ -7,39 +8,12 @@
 - command: /usr/sbin/exportfs -rv
 - apt: name=linux-image-extra-{{target_kernel_version}}-generic
 - copy: src=/boot/vmlinuz-{{target_kernel_version}}-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
-- copy: src=initramfs-tools dest=/tmp
-#- copy: src=/etc/initramfs-tools dest=/tmp
-#- copy: src=initramfs-tools/initramfs.conf dest=/tmp/initramfs-tools
+- copy: src=/etc/initramfs-tools dest=/tmp
+- copy: src=initramfs-tools/modules dest=/tmp/initramfs-tools
+- copy: src=initramfs-tools/initramfs.conf dest=/tmp/initramfs-tools
 - command: mkinitramfs -o /var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}/initramfs -c /tmp/initramfs-tools {{target_kernel_version}}-generic
-#- command: /usr/sbin/debootstrap --arch={{target_arch}} {{target_release}} /var/nfsroot/{{target_release}}-{{target_arch}}
+- command: /usr/sbin/debootstrap --arch={{target_arch}} {{target_release}} /var/nfsroot/{{target_release}}-{{target_arch}}
 - file: path=/var/nfsroot/{{target_release}}-{{target_arch}}/root/.ssh mode=600 state=directory
 - copy: src=/root/.ssh/id_rsa.pub dest=/var/nfsroot/{{target_release}}-{{target_arch}}/root/.ssh/authorized_keys mode=600
 - command: /usr/sbin/chroot /var/nfsroot/{{target_release}}-{{target_arch}} /usr/bin/apt-get update
 - command: /usr/sbin/chroot /var/nfsroot/{{target_release}}-{{target_arch}} /usr/bin/apt-get install -y openssh-server
-#- command: /bin/mount -o bind /dev /var/nfsroot/{{target_release}}-{{target_arch}}/dev
-#- command: /bin/mount -o bind /proc /var/nfsroot/{{target_release}}-{{target_arch}}/proc
-#- command: /bin/umount /var/nfsroot/{{target_release}}-{{target_arch}}/dev
-#- command: /bin/umount /var/nfsroot/{{target_release}}-{{target_arch}}/proc
-#- copy: src=/var/nfsroot/{{target_release}}-{{target_arch}}/usr/lib/syslinux/pxelinux.0 dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
-#- copy: src=/var/nfsroot/{{target_release}}-{{target_arch}}/boot/vmlinuz-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
-#- copy: src=/var/nfsroot/{{target_release}}-{{target_arch}}/boot/initrd.img-3.13.0-24-generic dest=/var/lib/tftpboot/ubuntu-boot/{{target_release}}/{{target_arch}}
-#- command: /usr/sbin/mkinitramfs -o /var/nfsroot/{{target_release}}-{{target_arch}}/boot/initrd.img
-# TODO download kernel
-#- set_fact:
-#    nginx_root: /usr/share/nginx/html
-# probably more version dependent than distro
-#- set_fact:
-#    nginx_root: /usr/share/nginx/www
-#  when: ansible_distribution == 'Debian'
-#- apt: name=syslinux state=present
-#- apt: name=dnsmasq state=present
-#- apt: name=nginx state=present
-#- file: path=/var/lib/tftpboot state=directory mode=755
-#- file: path=/var/lib/netboot_images state=directory mode=755
-#- command: tar xzvf /var/lib/netboot_images/{{target_arch}}-{{target_release}}-installer.tar.gz -C /var/lib/tftpboot
-#- template: src=var/lib/tftpboot/pxelinux.cfg/default dest=/var/lib/tftpboot/pxelinux.cfg/default mode=755
-#- template: src=etc/dnsmasq.d/main.conf dest=/etc/dnsmasq.d/main.conf
-#- template: src=etc/dnsmasq.d/mac_whitelist.conf dest=/etc/dnsmasq.d/mac_whitelist.conf
-#- template: src=etc/init.d/dnsmasq dest=/etc/init.d/dnsmasq
-#- service: name=dnsmasq state=restarted
-#- template: src=usr/share/nginx/html/ks.cfg dest={{nginx_root}}/ks.cfg mode=755
